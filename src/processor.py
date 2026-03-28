@@ -1,17 +1,18 @@
-test = {
-'items': 
-    [{'id': {'videoId': 'mx3g7XoPVNQ'}, 'snippet': {'title': 'A bad day to use python'}}, 
-    {'id': {'videoId': 's_oXtdhqXR8'}, 'snippet': {'title': '25 Tips &amp; Tricks in Python'}}, 
-    {'id': {'videoId': 'K5KVEU3aaeQ'}, 'snippet': {'title': 'Python Full Course for Beginners'}}, 
-    {'id': {'videoId': 'mRMmlo_Uqcs'}, 'snippet': {'title': 'you need to learn Python RIGHT NOW!! // EP 1'}}, 
-    {'id': {'videoId': 'x7X9w_GIm1s'}, 'snippet': {'title': 'Python in 100 Seconds'}}]}
+def processing(response):
+    processed_data = []
+    for item in response.get("items"):
+        video_id = item.get("id", {}).get("videoId")
+        title = item.get("snippet", {}).get("title")
 
+        if video_id and title:
+            video_data = {
+                    "title" : title,
+                    "videoId" : video_id
+                }
+                
+            processed_data.append(video_data)
+            
+    return processed_data
+            
 
-print(test)
-
-#{'items': 
-# [{'id': {'videoId': 'mx3g7XoPVNQ'}, 'snippet': {'title': 'A bad day to use python'}},
-#  {'id': {'videoId': 's_oXtdhqXR8'}, # 'snippet': {'title': '25 Tips &amp; Tricks in Python'}}, 
-# {'id': {'videoId': 'K5KVEU3aaeQ'}, 'snippet': {'title': 'Python Full Course for Beginners'}},
-#  {'id': {'videoId': 'mRMmlo_Uqcs'}, 'snippet': {'title': 'you need to learn Python RIGHT NOW!! // EP 1'}}, 
-# {'id': {'videoId': 'x7X9w_GIm1s'}, 'snippet': {'title': 'Python in 100 Seconds'}}]}
+    
