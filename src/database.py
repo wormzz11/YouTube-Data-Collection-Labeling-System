@@ -55,7 +55,3 @@ def insert_evaluation(evaluated_videos):
     res = cur.execute("Select * FROM yt_rel WHERE relevant = 1")
     print(res.fetchall())
     con.close()
-db_creator()
-insert_videos(videos)
-insert_evaluation(evaluated)
-    
