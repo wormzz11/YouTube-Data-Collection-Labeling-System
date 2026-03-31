@@ -42,7 +42,7 @@ def insert_evaluation(evaluation):
  
     
 
-def quick_inspection():
+def evaluation_count():
     with sqlite3.connect("data/database.db") as con:
         cur = con.cursor()
         cur.execute("""        
@@ -55,7 +55,7 @@ def quick_inspection():
         """)
         result = cur.fetchone()
         print("Non Nulls:", result[0], "Nulls:", result[1])
-       
+        return result
 
 def load_next_video():
     with sqlite3.connect("data/database.db") as con:

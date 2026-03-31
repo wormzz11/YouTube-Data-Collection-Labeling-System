@@ -1,5 +1,5 @@
 import  streamlit as st
-from src.database import insert_evaluation, quick_inspection, load_next_video
+from src.database import insert_evaluation, evaluation_count, load_next_video
 
 
 def main():
@@ -12,25 +12,28 @@ def main():
     if video is None:
         st.success("No videos left to label")
         st.stop()
+
     st.header(video["title"], divider="green")
     st.image(video["thumbnail"], width="stretch")
+
     videoId = video["videoId"]
+
     if st.button("Relevant"):
-        st.write("meow")
         relevancy = 1
         evaluation = (videoId, relevancy)
-        st.write(evaluation)
         insert_evaluation(evaluation)
         st.session_state.video = load_next_video()
     if st.button("irrelevant"):
-        st.write("meow")
         relevancy = 0
         evaluation = (videoId, relevancy)
-        st.write(evaluation)
         insert_evaluation(evaluation)
         st.session_state.video = load_next_video()
-
-    quick_inspection()
+    labeled, unlabeled = evaluation_count()
+    total = labeled + unlabeled
+    progress = labeled / total if total  > 0 else 0
+    st.progress(progress)
+    st.write(f"Progress: {labeled} / {total}")
+    
 
 
 
