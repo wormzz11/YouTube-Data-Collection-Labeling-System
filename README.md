@@ -67,7 +67,7 @@ The system follows a simple data pipeline:
   YOUTUBE_API_KEY = "<your_api_key_here>"
 ```
 8. Run the application:
-   ```bash
+ ```bash
    python -m streamlit run app/app.py
-   ```
+ ```
      
