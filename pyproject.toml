@@ -8,6 +8,8 @@ dependencies = [
     "requests",
     "streamlit",
     "google-api-python-client"
+    "pandas",
+    "openpyxl"
 ]
 
 [build-system]

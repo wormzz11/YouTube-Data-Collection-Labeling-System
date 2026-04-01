@@ -1,6 +1,8 @@
 from config.settings import YOUTUBE_API_KEY
 from googleapiclient.discovery import build
 
+youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
+
 def title_fetcher(query, quantity):
 
     if not isinstance(query, str):
@@ -12,7 +14,6 @@ def title_fetcher(query, quantity):
     if  quantity <= 0:
         raise ValueError("Quantity must be greater than 0" )
     
-    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
 
     request  = youtube.search().list(
         part =  "snippet",
@@ -22,9 +23,14 @@ def title_fetcher(query, quantity):
         fields ="items(id(videoId),snippet(title, thumbnails))",
         type = "video"
     )
-    response = request.execute()
-    print("Succesfuly fetched data from {} videos".format(quantity))
-    return response
+    try:
+        response = request.execute()
+        print("Succesfuly fetched data from {} videos".format(quantity))
+        return response
+    except Exception as e:
+        print("Something went wrong with fetching ", e)      
+        return None
+    
 
     
     
