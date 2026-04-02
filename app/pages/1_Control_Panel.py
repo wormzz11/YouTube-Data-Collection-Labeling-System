@@ -1,4 +1,3 @@
-
 import os
 import streamlit as st
 from googleapiclient.errors import HttpError
@@ -147,7 +146,7 @@ html, body, [class*="css"] {
 st.markdown("""
 <div class="ctrl-header">
     <span class="ctrl-brand">⚙️ Control Panel</span>
-    <span class="ctrl-badge">Pipeline · Export · Fetch</span>
+    <span class="ctrl-badge">Pipeline · Export</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -177,7 +176,7 @@ st.markdown('<p class="section-title">Run Pipeline</p>', unsafe_allow_html=True)
 st.markdown('<p class="section-sub">Fetch, process, and insert videos into the database</p>', unsafe_allow_html=True)
 
 pipeline_query = st.text_input("Query", placeholder="e.g. Python", key="pipeline_query")
-pipeline_quantity = st.number_input("Quantity", min_value=1, max_value=500, value=20, step=1, key="pipeline_quantity")
+pipeline_quantity = st.number_input("Quantity", min_value=1, max_value=5000, value=20, step=1, key="pipeline_quantity")
 pipeline_theme = st.text_input("Assign theme", placeholder="e.g. meow", key="pipeline_theme")
 
 if st.button("Run Pipeline", key="btn_pipeline"):
@@ -202,4 +201,5 @@ if st.button("Run Pipeline", key="btn_pipeline"):
                     st.error(f"YouTube API error: {e}")
             except Exception as e:
                 st.error(f"Pipeline failed: {e}")
+
 st.markdown('</div>', unsafe_allow_html=True)
