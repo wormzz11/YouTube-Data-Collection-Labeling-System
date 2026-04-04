@@ -3,7 +3,7 @@ import streamlit as st
 from googleapiclient.errors import HttpError
 from src.export import export
 from src.fetch import title_fetcher
-from src.database import db_creator, insert_videos
+from src.database import db_creator, insert_videos, delete_unlabeled
 from src.processor import processing
 
 st.set_page_config(
@@ -140,6 +140,15 @@ html, body, [class*="css"] {
     transform: translateY(-1px);
     box-shadow: 0 4px 20px rgba(200, 245, 96, 0.25) !important;
 }
+.btn-danger > button {
+    background: transparent !important;
+    color: #ff5f5f !important;
+    border: 2px solid #ff5f5f !important;
+}
+.btn-danger > button:hover {
+    background: rgba(255, 95, 95, 0.08) !important;
+    box-shadow: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -152,10 +161,10 @@ st.markdown("""
 
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.markdown('<p class="section-title">Export</p>', unsafe_allow_html=True)
-st.markdown('<p class="section-sub">Export labeled data for a theme to CSV or Excel. *all only requires theme for naming the exported file</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-sub">Export labeled data for a theme to CSV or Excel</p>', unsafe_allow_html=True)
 
 export_theme = st.text_input("Theme", placeholder="e.g. dogs", key="export_theme")
-export_mode = st.selectbox("Mode", options=["labeled", "all unlabeled", "all labeled"], key="export_mode")
+export_mode = st.selectbox("Mode", options=["labeled", "all unlabeled", "all"], key="export_mode")
 export_format = st.selectbox("File format", options=["csv", "xlsx"], key="export_format")
 
 if st.button("Export", key="btn_export"):
@@ -201,5 +210,20 @@ if st.button("Run Pipeline", key="btn_pipeline"):
                     st.error(f"YouTube API error: {e}")
             except Exception as e:
                 st.error(f"Pipeline failed: {e}")
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="section">', unsafe_allow_html=True)
+st.markdown('<p class="section-title">Database</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-sub">Clean up unlabeled videos after a session</p>', unsafe_allow_html=True)
+
+st.markdown('<div class="btn-danger">', unsafe_allow_html=True)
+if st.button("Clean unlabeled", key="btn_clean"):
+    try:
+        deleted = delete_unlabeled()
+        st.success(f"Removed {deleted} unlabeled rows.")
+    except Exception as e:
+        st.error(f"Failed: {e}")
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)

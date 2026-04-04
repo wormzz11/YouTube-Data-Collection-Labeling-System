@@ -152,3 +152,10 @@ def reset_database():
         cur.execute("DELETE FROM yt_rel WHERE theme IS NOT NULL")
         cur.execute("UPDATE yt_rel SET relevant = NULL")
         con.commit()
+
+def delete_unlabeled():
+    with sqlite3.connect(DB_PATH) as con:
+        cur = con.cursor()
+        cur.execute("DELETE FROM yt_rel WHERE relevant IS NULL AND theme IS NULL")
+        con.commit()
+        return cur.rowcount
