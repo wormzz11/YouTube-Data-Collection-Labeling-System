@@ -8,7 +8,7 @@ youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
 def title_fetcher(query,  total_quantity):
     all_items = []
     token = None
-    while  len(all_items) <=  total_quantity:
+    while len(all_items) < total_quantity:
         remaining = total_quantity - len(all_items)
         maxResults = min(50, remaining)
         request = youtube.search().list(
