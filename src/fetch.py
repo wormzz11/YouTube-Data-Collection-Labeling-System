@@ -16,7 +16,7 @@ def title_fetcher(query,  total_quantity):
             maxResults=maxResults,
             q=query,
             relevanceLanguage="en",
-            fields="nextPageToken,items(id(videoId),snippet(title, thumbnails))",
+            fields="nextPageToken,items(id(videoId),snippet(title,description,thumbnails))",
             type="video",
             pageToken = token
         )

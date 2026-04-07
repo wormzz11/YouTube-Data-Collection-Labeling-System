@@ -3,6 +3,7 @@ def processing(response):
     for item in response.get("items"):
         video_id = item.get("id", {}).get("videoId")
         title = item.get("snippet", {}).get("title")
+        description = item.get("snippet", {}).get("description")
         snippet = item.get("snippet")
         thumbnails = snippet.get("thumbnails")
         thumbnail = (
@@ -13,11 +14,12 @@ def processing(response):
         )
         
 
-        if video_id and title and thumbnail:
+        if video_id and title and thumbnail and description:
             video_data = {
                     "title" : title,
                     "videoId" : video_id,
-                    "thumbnail" : thumbnail
+                    "thumbnail" : thumbnail,
+                    "description" : description
                 }
                 
             processed_data.append(video_data)

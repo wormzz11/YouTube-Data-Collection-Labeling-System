@@ -14,6 +14,7 @@ def db_creator():
                 thumbnail TEXT,
                 relevant  INTEGER,
                 theme     TEXT,
+                description TEXT,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE(videoId, theme)
             )
@@ -37,11 +38,12 @@ def insert_videos(videos, theme=None):
         for video in videos:
             videoId = video.get("videoId")
             title = video.get("title")
+            description = video.get("description")
             thumbnail = video.get("thumbnail")
             cur.execute("""
-                INSERT OR IGNORE INTO yt_rel(videoId, title, thumbnail, relevant, theme)
-                VALUES(?, ?, ?, NULL, ?)
-            """, (videoId, title, thumbnail, theme))
+                INSERT OR IGNORE INTO yt_rel(videoId, title, thumbnail, relevant, theme, description)
+                VALUES(?, ?, ?, NULL, ?, ?)
+            """, (videoId, title, thumbnail, theme, description))
         con.commit()
 
 
