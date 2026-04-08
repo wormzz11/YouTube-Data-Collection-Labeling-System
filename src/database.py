@@ -14,7 +14,6 @@ def db_creator():
                 thumbnail TEXT,
                 relevant  INTEGER,
                 theme     TEXT,
-                description TEXT,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE(videoId, theme)
             )
@@ -38,12 +37,11 @@ def insert_videos(videos, theme=None):
         for video in videos:
             videoId = video.get("videoId")
             title = video.get("title")
-            description = video.get("description")
             thumbnail = video.get("thumbnail")
             cur.execute("""
-                INSERT OR IGNORE INTO yt_rel(videoId, title, thumbnail, relevant, theme, description)
-                VALUES(?, ?, ?, NULL, ?, ?)
-            """, (videoId, title, thumbnail, theme, description))
+                INSERT OR IGNORE INTO yt_rel(videoId, title, thumbnail, relevant, theme)
+                VALUES(?, ?, ?, NULL, ?)
+            """, (videoId, title, thumbnail, theme))
         con.commit()
 
 
@@ -52,23 +50,23 @@ def insert_evaluation(evaluation):
     with sqlite3.connect(DB_PATH) as con:
         cur = con.cursor()
         cur.execute("""
-            SELECT title, thumbnail, description FROM yt_rel WHERE videoId = ? AND theme IS NULL LIMIT 1
+            SELECT title, thumbnail FROM yt_rel WHERE videoId = ? AND theme IS NULL LIMIT 1
         """, (videoId,))
         row = cur.fetchone()
 
         if row:
-            title, thumbnail, description = row
+            title, thumbnail = row
         else:
-            title, thumbnail, description = None, None, None
+            title, thumbnail = None, None, 
         cur.execute("""
-            INSERT INTO yt_rel(videoId, title, thumbnail, relevant, theme, description)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO yt_rel(videoId, title, thumbnail, relevant, theme)
+            VALUES (?, ?, ?, ?, ?)
             ON CONFLICT(videoId, theme)
             DO UPDATE SET
                 relevant = excluded.relevant,
                 updated_at = CURRENT_TIMESTAMP
-                description = COALESCE(yt_rel.description, excluded.description),
-        """, (videoId, title, thumbnail, relevancy, theme, description))
+                
+        """, (videoId, title, thumbnail, relevancy, theme))
         con.commit()
 
 
